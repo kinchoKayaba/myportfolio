@@ -1,4 +1,5 @@
 {% extends 'portfolio_app/base.html' %}
+{% load portfolio_tags %}
 
 {% block title %}ホーム - ポートフォリオ{% endblock %}
 
@@ -46,7 +47,7 @@
                         <p class="card-text">
                             <span class="badge bg-primary">{{ skill.get_category_display }}</span>
                             <div class="progress mt-2">
-                                <div class="progress-bar" role="progressbar" style="width: {{ skill.level|multiply:20 }}%">
+                                <div class="progress-bar w-{{ skill.level|multiply:20 }}" role="progressbar">
                                     Level {{ skill.level }}
                                 </div>
                             </div>
