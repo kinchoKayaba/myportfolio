@@ -1,0 +1,134 @@
+{% extends 'portfolio_app/base.html' %}
+
+{% block title %}自己紹介 - ポートフォリオ{% endblock %}
+
+{% block content %}
+<!-- プロフィールセクション -->
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" class="img-fluid rounded mb-4">
+                {% endif %}
+                <h2>{{ profile.name }}</h2>
+                <p class="lead">{{ profile.title }}</p>
+                <div class="mb-4">
+                    {% if profile.github_url %}
+                    <a href="{{ profile.github_url }}" class="btn btn-dark me-2" target="_blank">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                    {% endif %}
+                    {% if profile.linkedin_url %}
+                    <a href="{{ profile.linkedin_url }}" class="btn btn-primary me-2" target="_blank">
+                        <i class="bi bi-linkedin"></i> LinkedIn
+                    </a>
+                    {% endif %}
+                    {% if profile.twitter_url %}
+                    <a href="{{ profile.twitter_url }}" class="btn btn-info" target="_blank">
+                        <i class="bi bi-twitter"></i> Twitter
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h3>自己紹介</h3>
+                <p>{{ profile.bio }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- スキルセクション -->
+<section class="bg-light section">
+    <div class="container">
+        <h2 class="text-center mb-5">スキル</h2>
+        <div class="row">
+            {% for skill in skills %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ skill.name }}</h5>
+                        <p class="card-text">
+                            <span class="badge bg-primary">{{ skill.get_category_display }}</span>
+                            <div class="progress mt-2">
+                                <div class="progress-bar" role="progressbar" style="width: {{ skill.level|multiply:20 }}%">
+                                    Level {{ skill.level }}
+                                </div>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 学歴セクション -->
+<section class="section">
+    <div class="container">
+        <h2 class="text-center mb-5">学歴</h2>
+        <div class="row">
+            {% for education in educations %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ education.school_name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ education.degree }}</h6>
+                        <p class="card-text">
+                            <strong>専攻:</strong> {{ education.field_of_study }}<br>
+                            <strong>期間:</strong> {{ education.start_date|date:"Y/m" }} - 
+                            {% if education.is_current %}
+                            現在
+                            {% else %}
+                            {{ education.end_date|date:"Y/m" }}
+                            {% endif %}
+                        </p>
+                        {% if education.description %}
+                        <p class="card-text">{{ education.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 職務経歴セクション -->
+<section class="bg-light section">
+    <div class="container">
+        <h2 class="text-center mb-5">職務経歴</h2>
+        <div class="row">
+            {% for experience in experiences %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ experience.company_name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ experience.position }}</h6>
+                        <p class="card-text">
+                            <strong>期間:</strong> {{ experience.start_date|date:"Y/m" }} - 
+                            {% if experience.is_current %}
+                            現在
+                            {% else %}
+                            {{ experience.end_date|date:"Y/m" }}
+                            {% endif %}
+                        </p>
+                        <p class="card-text">{{ experience.description }}</p>
+                        {% if experience.technologies.all %}
+                        <div class="mt-3">
+                            <strong>使用技術:</strong>
+                            {% for tech in experience.technologies.all %}
+                            <span class="badge bg-secondary me-1">{{ tech.name }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %} 

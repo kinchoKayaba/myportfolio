@@ -1,0 +1,78 @@
+{% extends 'portfolio_app/base.html' %} {% block title %}{{ project.title }} -
+ポートフォリオ{% endblock %} {% block content %}
+<section class="section">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'portfolio:home' %}">ホーム</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'portfolio:project_list' %}">プロジェクト一覧</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ project.title }}
+        </li>
+      </ol>
+    </nav>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <h1 class="mb-4">{{ project.title }}</h1>
+        {% if project.image %}
+        <img
+          src="{{ project.image.url }}"
+          alt="{{ project.title }}"
+          class="img-fluid rounded mb-4"
+        />
+        {% endif %}
+        <div class="mb-4">
+          <h5>プロジェクト概要</h5>
+          <p>{{ project.description }}</p>
+        </div>
+        <div class="mb-4">
+          <h5>使用技術</h5>
+          <div>
+            {% for tech in project.technologies.all %}
+            <span class="badge bg-secondary me-1 mb-1">{{ tech.name }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="mb-4">
+          <h5>開発期間</h5>
+          <p>
+            {{ project.start_date|date:"Y/m" }} - {% if project.is_ongoing %}
+            現在 {% else %} {{ project.end_date|date:"Y/m" }} {% endif %}
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">リンク</h5>
+            <div class="d-grid gap-2">
+              {% if project.github_url %}
+              <a
+                href="{{ project.github_url }}"
+                class="btn btn-dark"
+                target="_blank"
+              >
+                <i class="bi bi-github"></i> GitHub
+              </a>
+              {% endif %} {% if project.demo_url %}
+              <a
+                href="{{ project.demo_url }}"
+                class="btn btn-primary"
+                target="_blank"
+              >
+                <i class="bi bi-box-arrow-up-right"></i> デモサイト
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
