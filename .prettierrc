@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": "**/templates/**/*.html",
+      "options": {
+        "parser": "none"
+      }
+    }
+  ]
+}

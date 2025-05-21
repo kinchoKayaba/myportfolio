@@ -24,24 +24,25 @@ class Profile(models.Model):
 class Skill(models.Model):
     """スキル情報を管理するモデル"""
     CATEGORY_CHOICES = [
-        ('frontend', 'フロントエンド'),
-        ('backend', 'バックエンド'),
+        ('programming', 'プログラミング言語'),
+        ('framework', 'フレームワーク'),
         ('database', 'データベース'),
-        ('devops', 'DevOps'),
+        ('tool', 'ツール'),
         ('other', 'その他'),
     ]
 
     name = models.CharField('スキル名', max_length=100)
+    category = models.CharField('カテゴリー', max_length=20, choices=CATEGORY_CHOICES)
     level = models.IntegerField('レベル', choices=[(i, i) for i in range(1, 6)])
-    category = models.CharField('カテゴリー', max_length=50, choices=CATEGORY_CHOICES)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
+    updated_at = models.DateTimeField('更新日時', auto_now=True)
 
     class Meta:
         verbose_name = 'スキル'
         verbose_name_plural = 'スキル'
 
     def __str__(self):
-        return f"{self.name} (レベル{self.level})"
+        return f"{self.name} ({self.get_category_display()})"
 
 class Project(models.Model):
     """プロジェクト情報を管理するモデル"""
@@ -55,6 +56,7 @@ class Project(models.Model):
     end_date = models.DateField('終了日', null=True, blank=True)
     is_ongoing = models.BooleanField('進行中', default=False)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
+    updated_at = models.DateTimeField('更新日時', auto_now=True)
 
     class Meta:
         verbose_name = 'プロジェクト'
@@ -74,6 +76,7 @@ class Education(models.Model):
     is_current = models.BooleanField('在学中', default=False)
     description = models.TextField('説明', blank=True)
     created_at = models.DateTimeField('作成日時', default=timezone.now)
+    updated_at = models.DateTimeField('更新日時', auto_now=True)
 
     class Meta:
         verbose_name = '学歴'
@@ -82,25 +85,6 @@ class Education(models.Model):
 
     def __str__(self):
         return f"{self.school_name} - {self.degree}"
-
-class Experience(models.Model):
-    """職務経歴を管理するモデル"""
-    company_name = models.CharField('会社名', max_length=200)
-    position = models.CharField('役職', max_length=200)
-    start_date = models.DateField('開始日')
-    end_date = models.DateField('終了日', null=True, blank=True)
-    is_current = models.BooleanField('在職中', default=False)
-    description = models.TextField('説明')
-    technologies = models.ManyToManyField(Skill, verbose_name='使用技術')
-    created_at = models.DateTimeField('作成日時', default=timezone.now)
-
-    class Meta:
-        verbose_name = '職務経歴'
-        verbose_name_plural = '職務経歴'
-        ordering = ['-start_date']
-
-    def __str__(self):
-        return f"{self.company_name} - {self.position}"
 
 class Contact(models.Model):
     """お問い合わせ情報を管理するモデル"""

@@ -2,11 +2,11 @@
 ポートフォリオ{% endblock %} {% block content %}
 <section class="section">
   <div class="container">
-    <h1 class="text-center mb-5">プロジェクト一覧</h1>
+    <h2 class="text-center mb-5">プロジェクト一覧</h2>
     <div class="row">
       {% for project in projects %}
       <div class="col-md-4 mb-4">
-        <div class="card project-card">
+        <div class="card h-100">
           {% if project.image %}
           <img
             src="{{ project.image.url }}"
@@ -49,17 +49,16 @@
             </div>
           </div>
           <div class="card-footer text-muted">
-            <small>
-              期間: {{ project.start_date|date:"Y/m" }} - {% if
-              project.is_ongoing %} 現在 {% else %} {{
-              project.end_date|date:"Y/m" }} {% endif %}
-            </small>
+            <small>期間: {{ project.start_date|date:"Y/m" }} - {% if project.is_ongoing %}現在{% else %}{{ project.end_date|date:"Y/m" }}{% endif %}</small>
           </div>
         </div>
       </div>
       {% empty %}
       <div class="col-12 text-center">
-        <p class="lead">プロジェクトがまだ登録されていません。</p>
+        <p class="lead">
+          現在、公開できるプロジェクトはありません。<br />
+          ただいま作成中です。
+        </p>
       </div>
       {% endfor %}
     </div>

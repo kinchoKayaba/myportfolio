@@ -1,44 +1,40 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
-from .models import Profile, Project, Skill, Education, Experience
+from .models import Profile, Project, Skill, Education
 
 # Create your views here.
 
-class HomeView(TemplateView):
-    """トップページのビュー"""
-    template_name = 'portfolio_app/home.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['profile'] = Profile.objects.first()
-        context['skills'] = Skill.objects.all()
-        context['projects'] = Project.objects.all().order_by('-created_at')[:3]  # 最新3件
-        return context
+def home(request):
+    profile = Profile.objects.first()
+    skills = Skill.objects.all()
+    projects = Project.objects.all()[:3]  # 最新の3件を表示
+    return render(request, 'portfolio_app/home.html', {
+        'profile': profile,
+        'skills': skills,
+        'projects': projects,
+    })
 
-class AboutView(TemplateView):
-    """自己紹介ページのビュー"""
-    template_name = 'portfolio_app/about.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['profile'] = Profile.objects.first()
-        context['skills'] = Skill.objects.all()
-        context['educations'] = Education.objects.all().order_by('-start_date')
-        context['experiences'] = Experience.objects.all().order_by('-start_date')
-        return context
+def about(request):
+    profile = Profile.objects.first()
+    skills = Skill.objects.all()
+    educations = Education.objects.all().order_by('-start_date')
+    return render(request, 'portfolio_app/about.html', {
+        'profile': profile,
+        'skills': skills,
+        'educations': educations,
+    })
 
-class ProjectListView(ListView):
-    """プロジェクト一覧ページのビュー"""
-    model = Project
-    template_name = 'portfolio_app/project_list.html'
-    context_object_name = 'projects'
-    ordering = ['-created_at']
+def project_list(request):
+    projects = Project.objects.all().order_by('-created_at')
+    return render(request, 'portfolio_app/project_list.html', {
+        'projects': projects,
+    })
 
-class ProjectDetailView(DetailView):
-    """プロジェクト詳細ページのビュー"""
-    model = Project
-    template_name = 'portfolio_app/project_detail.html'
-    context_object_name = 'project'
+def project_detail(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    return render(request, 'portfolio_app/project_detail.html', {
+        'project': project,
+    })
 
 class SkillListView(ListView):
     """スキル一覧ページのビュー"""
